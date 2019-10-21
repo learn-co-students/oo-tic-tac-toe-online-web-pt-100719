@@ -30,7 +30,7 @@ class TicTacToe
   end
   
   def valid_move?(index)
-    index <= 8 && !position_taken?(index)
+    (0..8).include?(index) && !position_taken?(index)
   end
   
   def turn_count
@@ -66,11 +66,21 @@ class TicTacToe
       move(index, current_player)
       display_board
     else
-      turn(display_board)
+      turn
     end
   end
 
   def won?
-    x = WIN_COMBINATIONS.find[0,1,2]
+    WIN_COMBINATIONS.each do |win|
+      win_1 = @board[win[0]]
+      win_2 = @board[win[1]]
+      win_3 = @board[win[2]]
+      if win_1 == "X" && win_2 == "X" && win_3 == "X"
+        return win
+      elsif win_1 == "O" && win_2 == "O" && win_3 == "O"
+        return win
+      end
+    end
+    return false
   end
 end

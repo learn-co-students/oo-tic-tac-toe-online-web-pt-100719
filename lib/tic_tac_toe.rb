@@ -44,34 +44,22 @@ class TicTacToe
   def current_player
     turn_count % 2 == 0 ? "X" : "O"
   end
-  
-=begin  def turn
-    puts "Pick a number 1-9"
-    input = gets.chomp
-    index = input_to_index(input)
-    player = current_player
-    if valid_move?(index)
-      move(index, player)
-      display_board
-    else
-      turn
-    end
-  end
-=end
+
   def turn
-    puts "Please enter 1-9:"
-    user_input = gets.strip
-    index = input_to_index(user_input)
-    if valid_move?(index)
-      move(index, current_player)
-      display_board
+    puts "Please enter 1-9: " 
+    user_input = gets.chomp #Gets user input
+    index = input_to_index(user_input) #Has user input converted to index value
+    if valid_move?(index) #If the move is valid
+      move(index, current_player) #Move current_player to index
+      display_board #Display updated board
     else
-      turn
+      turn #If not valid move, run turn method again
     end
   end
 
+# Iterate through win WIN_COMBINATIONS to find if "X", or "O" has got three in a row
   def won?
-    WIN_COMBINATIONS.each do |win|
+    WIN_COMBINATIONS.each do |win| 
       win_1 = @board[win[0]]
       win_2 = @board[win[1]]
       win_3 = @board[win[2]]
@@ -82,5 +70,45 @@ class TicTacToe
       end
     end
     return false
+  end
+  
+  def full?
+    @board.all? {|index| index == "X" || index == "O"}
+  end
+  #If the full? or won? method returns true, return true, else return false
+  def draw?
+    !won? && full? ? true : false
+  end
+  #If the draw? or won? method returns true, return true, else return false
+  def over?
+    draw? || won? ? true : false
+  end
+  
+  #Recycled the concept of the the won? method but replaced the return values with strings, and a nil outside the WIN_COMBINATIONS each method to return nil if nobody won.
+  def winner
+    WIN_COMBINATIONS.each do |win|
+      win_1 = @board[win[0]]
+      win_2 = @board[win[1]]
+      win_3 = @board[win[2]]
+      if win_1 == "X" && win_2 == "X" && win_3 == "X"
+        return "X"
+      elsif win_1 == "O" && win_2 == "O" && win_3 == "O"
+        return "O"
+      end
+    end
+    nil
+  end
+  
+  def play
+    while !over?
+      turn
+    end
+    if winner === "X"
+      puts "Congratulations X!"
+    elsif winner === "O"
+      puts "Congratulations O!"
+    else
+      puts "Cat's Game!"
+    end
   end
 end

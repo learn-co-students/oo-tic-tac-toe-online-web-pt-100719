@@ -49,7 +49,7 @@ class TicTacToe
   end
   
   def turn
-    puts "#{current_player} please enter a value from 1 to 9:"
+    puts "please enter a value from 1 to 9:"
     input = gets 
     index = input_to_index(input)
     #p = current_player
@@ -59,5 +59,59 @@ class TicTacToe
     else
       turn
     end
+   end
+ 
+ def won?
+  WIN_COMBINATIONS.find do 
+    |win_combo|
+    if (@board[win_combo[0]]) == "X" && (@board[win_combo[1]]) == "X" && (@board[win_combo[2]]) == "X"
+      return win_combo
+    elsif (@board[win_combo[0]]) == "O" && (@board[win_combo[1]]) == "O" && (@board[win_combo[2]]) == "O"
+      return win_combo
+    end
+      false
+    end
+  end
+  
+  def full?
+  @board.all?{|occupied| occupied != " "}
+end
+
+#draw
+def draw?
+  !(won?) && (full?)
+end
+
+#over?
+def over?
+  won? || full? || draw?
+end
+
+#winner?
+def winner
+  WIN_COMBINATIONS.detect do |win_combo|
+    if (@board[win_combo[0]]) == "X" && (@board[win_combo[1]]) == "X" && (@board[win_combo[2]]) == "X"
+      return "X"
+    elsif (@board[win_combo[0]]) == "O" && (@board[win_combo[1]]) == "O" && (@board[win_combo[2]]) == "O"
+      return "O"
+    else
+      nil
+    end
+  end
+end
+
+ 
+ 
+ def play
+  # puts "Please make a move! :)"
+  until over?
+    turn
+  end
+  if won?
+    puts "Congratulations #{winner}!"
+  elsif draw?
+    puts "Cat's Game!"
+  end
  end
 end
+
